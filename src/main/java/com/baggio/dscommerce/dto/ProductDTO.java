@@ -15,7 +15,7 @@ public class ProductDTO {
 
     private String imgUrl;
 
-    public ProductDTO(Long id) {
+    public ProductDTO() {
     }
 
     public ProductDTO(Long id, String name, String description, Double price, String imgUrl) {
