@@ -32,19 +32,26 @@ public class ProductService {
 
     @Transactional
     public ProductDTO insert(ProductDTO productDTO) {
-        Product product = dtoToProduct(productDTO);
+        Product product = new Product();
+        dtoToProduct(productDTO, product);
         product = productRepository.save(product);
 
         return new ProductDTO(product);
     }
 
-    private static Product dtoToProduct(ProductDTO productDTO) {
-        Product product = new Product();
+    @Transactional
+    public ProductDTO update(Long id, ProductDTO productDTO) {
+        Product product = productRepository.getReferenceById(id);
+        dtoToProduct(productDTO, product);
+        product = productRepository.save(product);
+        return new ProductDTO(product);
+    }
+
+    private void dtoToProduct(ProductDTO productDTO, Product product) {
         product.setName(productDTO.getName());
         product.setDescription(productDTO.getDescription());
         product.setPrice(productDTO.getPrice());
         product.setImgUrl(productDTO.getImgUrl());
-        return product;
     }
 
 }
