@@ -1,12 +1,15 @@
 package com.baggio.dscommerce.dto;
 
-import com.baggio.dscommerce.entities.Product;
-import jakarta.persistence.Column;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class ProductDTO {
 
     private Long id;
@@ -24,42 +27,4 @@ public class ProductDTO {
 
     private String imgUrl;
 
-    public ProductDTO() {
-    }
-
-    public ProductDTO(Long id, String name, String description, Double price, String imgUrl) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.price = price;
-        this.imgUrl = imgUrl;
-    }
-
-    public ProductDTO(Product product) {
-        id = product.getId();
-        name = product.getName();
-        description = product.getDescription();
-        price = product.getPrice();
-        imgUrl = product.getImgUrl();
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public Double getPrice() {
-        return price;
-    }
-
-    public String getImgUrl() {
-        return imgUrl;
-    }
 }
