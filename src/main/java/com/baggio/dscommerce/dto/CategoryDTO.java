@@ -1,29 +1,19 @@
 package com.baggio.dscommerce.dto;
 
-import com.baggio.dscommerce.entities.Category;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class CategoryDTO {
+
+    @EqualsAndHashCode.Include
     private Long id;
 
     private String name;
 
-    public CategoryDTO() {}
-
-    public CategoryDTO(Long id, String name) {
-        this.id = id;
-        this.name = name;
-    }
-
-    public CategoryDTO(Category category) {
-        id = category.getId();
-        name = category.getName();
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
 }

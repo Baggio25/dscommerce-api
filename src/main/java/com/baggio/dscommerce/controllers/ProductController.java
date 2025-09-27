@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.util.List;
 
 @RestController
 @RequestMapping(value = "/products")
@@ -26,7 +25,7 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<ProductDTO>> finAll(Pageable pageable) {
+    public ResponseEntity<Page<ProductDTO>> findAll(Pageable pageable) {
         return ResponseEntity.ok(productService.findAll(pageable));
     }
 
