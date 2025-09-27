@@ -42,7 +42,7 @@ public class ProductService {
     public ProductDTO insert(ProductDTO productDTO) {
         Product product = mapperUtil.map(productDTO, Product.class);
         product = productRepository.save(product);
-
+        
         return mapperUtil.map(product, ProductDTO.class);
     }
 

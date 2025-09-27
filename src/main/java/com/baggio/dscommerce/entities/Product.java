@@ -2,7 +2,6 @@ package com.baggio.dscommerce.entities;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 
 import jakarta.persistence.Column;
@@ -18,7 +17,6 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Data
@@ -49,9 +47,10 @@ public class Product {
 	inverseJoinColumns = @JoinColumn(name = "category_id"))
 	private Set<Category> categories = new HashSet<>();
 	
-	@Getter
 	@OneToMany(mappedBy = "id.product")
 	private Set<OrderItem> items = new HashSet<>();
 	
-		
+	public List<Order> getOrders() {
+		return items.stream().map(x -> x.getOrder()).toList();	
+	}
 }
