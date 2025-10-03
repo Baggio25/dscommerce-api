@@ -1,7 +1,10 @@
 package com.baggio.dscommerce.services;
 
+import com.baggio.dscommerce.dto.CategoryDTO;
 import com.baggio.dscommerce.dto.ProductDTO;
+import com.baggio.dscommerce.entities.Category;
 import com.baggio.dscommerce.entities.Product;
+import com.baggio.dscommerce.repositories.CategoryRepository;
 import com.baggio.dscommerce.repositories.ProductRepository;
 import com.baggio.dscommerce.services.exceptions.DatabaseException;
 import com.baggio.dscommerce.services.exceptions.ResourceNotFoundException;
@@ -23,36 +26,40 @@ public class ProductService {
     private ProductRepository productRepository;
 
     @Autowired
-    private MapperUtil mapperUtil;
+    private CategoryRepository categoryRepository;
+
+    //@Autowired
+    //private MapperUtil mapperUtil;
 
     @Transactional(readOnly = true)
     public ProductDTO findById(Long id) {
         Product product =  productRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Recurso não encontrado com id: " + id));
-        return mapperUtil.map(product, ProductDTO.class);
+        return new ProductDTO(product);
     }
 
     @Transactional(readOnly = true)
     public Page<ProductDTO> findAll(Pageable pageable) {
         Page<Product> products = productRepository.findAll(pageable);
-        return mapperUtil.mapList(products, ProductDTO.class);
+        return products.map(ProductDTO::new);
     }
 
     @Transactional
     public ProductDTO insert(ProductDTO productDTO) {
-        Product product = mapperUtil.map(productDTO, Product.class);
+        Product product = new Product();
+        dtoToEntity(productDTO, product);
         product = productRepository.save(product);
         
-        return mapperUtil.map(product, ProductDTO.class);
+        return new ProductDTO(product);
     }
 
     @Transactional
     public ProductDTO update(Long id, ProductDTO productDTO) {
         try {
             Product productAtual = productRepository.getReferenceById(id);
-            Product product = mapperUtil.map(productDTO, Product.class);
-            product = productRepository.save(productAtual);
-            return mapperUtil.map(product, ProductDTO.class);
+            dtoToEntity(productDTO, productAtual);
+            productAtual = productRepository.save(productAtual);
+            return new ProductDTO(productAtual);
         }catch (EntityNotFoundException e) {
             throw new ResourceNotFoundException("Recurso não encontrado com id: " + id);
         }
@@ -67,6 +74,18 @@ public class ProductService {
             productRepository.deleteById(id);
         } catch (DataIntegrityViolationException e) {
             throw new DatabaseException("Falha de integridade referencial");
+        }
+    }
+
+    private void dtoToEntity(ProductDTO productDTO, Product product) {
+        product.setName(productDTO.getName());
+        product.setDescription(productDTO.getDescription());
+        product.setPrice(productDTO.getPrice());
+        product.setImgUrl(productDTO.getImgUrl());
+
+        for(CategoryDTO catDTO : productDTO.getCategories()) {
+            Category cat = categoryRepository.getReferenceById(catDTO.getId());
+            product.getCategories().add(cat);
         }
     }
 

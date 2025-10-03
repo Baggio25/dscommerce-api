@@ -1,11 +1,16 @@
 package com.baggio.dscommerce.dto;
 
+import com.baggio.dscommerce.entities.Category;
+import com.baggio.dscommerce.entities.Product;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -26,5 +31,19 @@ public class ProductDTO {
     private Double price;
 
     private String imgUrl;
+
+    private Set<CategoryDTO> categories = new HashSet<>();
+
+    public ProductDTO(Product product) {
+        id = product.getId();
+        name = product.getName();
+        description = product.getDescription();
+        price = product.getPrice();
+        imgUrl = product.getImgUrl();
+
+        for(Category cat : product.getCategories()) {
+            categories.add(new CategoryDTO(cat));
+        }
+    }
 
 }

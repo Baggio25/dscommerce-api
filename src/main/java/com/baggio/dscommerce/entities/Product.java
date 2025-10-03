@@ -4,6 +4,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.baggio.dscommerce.dto.CategoryDTO;
+import com.baggio.dscommerce.dto.ProductDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -51,6 +53,7 @@ public class Product {
 	private Set<OrderItem> items = new HashSet<>();
 	
 	public List<Order> getOrders() {
-		return items.stream().map(x -> x.getOrder()).toList();	
+		return items.stream().map(OrderItem::getOrder).toList();
 	}
+
 }
