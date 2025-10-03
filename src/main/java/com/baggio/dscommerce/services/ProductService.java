@@ -10,6 +10,7 @@ import com.baggio.dscommerce.services.exceptions.DatabaseException;
 import com.baggio.dscommerce.services.exceptions.ResourceNotFoundException;
 import com.baggio.dscommerce.utils.MapperUtil;
 
+import com.baggio.dscommerce.utils.Messages;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -61,19 +62,19 @@ public class ProductService {
             productAtual = productRepository.save(productAtual);
             return new ProductDTO(productAtual);
         }catch (EntityNotFoundException e) {
-            throw new ResourceNotFoundException("Recurso não encontrado com id: " + id);
+            throw new ResourceNotFoundException(Messages.RECURSO_NAO_ENCONTRADO + " " + id);
         }
     }
 
     @Transactional(propagation = Propagation.SUPPORTS)
     public void delete(Long id) {
         if (!productRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Recurso não encontrado com id: " + id);
+            throw new ResourceNotFoundException(Messages.RECURSO_NAO_ENCONTRADO + " " + id);
         }
         try {
             productRepository.deleteById(id);
         } catch (DataIntegrityViolationException e) {
-            throw new DatabaseException("Falha de integridade referencial");
+            throw new DatabaseException(Messages.INTEGRIDADE_REFERENCIAL);
         }
     }
 
